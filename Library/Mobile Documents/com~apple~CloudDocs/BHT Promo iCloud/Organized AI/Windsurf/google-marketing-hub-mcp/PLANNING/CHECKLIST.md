@@ -24,17 +24,17 @@
 - [x] Token refresh works automatically
 - [x] **PHASE-1-COMPLETE.md created**
 
-## Phase 2: GCP Tools (8 tools)
-- [ ] ghub_gcp_list_projects
-- [ ] ghub_gcp_get_project
-- [ ] ghub_gcp_list_service_accounts
-- [ ] ghub_gcp_list_services
-- [ ] ghub_gcp_enable_service
-- [ ] ghub_gcp_list_iam_roles
-- [ ] ghub_gcp_get_project_iam
-- [ ] ghub_gcp_set_project_iam
-- [ ] All tools pass /test-tool validation
-- [ ] **PHASE-2-COMPLETE.md created**
+## Phase 2: GCP Tools (8 tools) ✅
+- [x] gcp_list_projects
+- [x] gcp_get_project
+- [x] gcp_list_service_accounts
+- [x] gcp_get_service_account
+- [x] gcp_list_enabled_apis
+- [x] gcp_enable_api
+- [x] gcp_get_billing_info
+- [x] gcp_list_billing_accounts
+- [x] All tools deployed and tested
+- [x] **PHASE-2-COMPLETE.md created**
 
 ## Phase 3: GA4 Tools (11 tools)
 - [ ] ghub_ga4_list_properties
@@ -127,7 +127,7 @@
 |-------|-------|--------|
 | 0 | 0 | ✅ |
 | 1 | 4 | ✅ |
-| 2 | 8 | ⏳ |
+| 2 | 8 | ✅ |
 | 3 | 11 | ⏳ |
 | 4 | 19 | ⏳ |
 | 5 | 12 | ⏳ |

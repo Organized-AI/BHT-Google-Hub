@@ -13,6 +13,19 @@
 import { TokenManager, TokenError } from './lib/token-manager';
 import { GoogleApiClient, ApiError, createGoogleApiClient } from './lib/google-api-client';
 
+// GCP Tools
+import {
+  GCP_TOOLS,
+  handleGcpListProjects,
+  handleGcpGetProject,
+  handleGcpListServiceAccounts,
+  handleGcpGetServiceAccount,
+  handleGcpListEnabledApis,
+  handleGcpEnableApi,
+  handleGcpGetBillingInfo,
+  handleGcpListBillingAccounts,
+} from './tools/gcp';
+
 export interface Env {
   DB: D1Database;
   KV: KVNamespace;
@@ -33,6 +46,8 @@ const GOOGLE_SCOPES = [
   'https://www.googleapis.com/auth/analytics.readonly',
   'https://www.googleapis.com/auth/analytics.edit',
   'https://www.googleapis.com/auth/cloud-platform.read-only',
+  'https://www.googleapis.com/auth/cloud-platform',
+  'https://www.googleapis.com/auth/cloud-billing.readonly',
 ].join(' ');
 
 // MCP Response types
@@ -108,7 +123,7 @@ const AUTH_TOOLS: Tool[] = [
 ];
 
 // All tools (will be expanded in each phase)
-const TOOLS: Tool[] = [...AUTH_TOOLS];
+const TOOLS: Tool[] = [...AUTH_TOOLS, ...GCP_TOOLS];
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -347,6 +362,50 @@ async function handleToolCall(
       case 'ghub_auth_list':
         result = await handleAuthList(tokenManager);
         break;
+
+      // GCP tools - require user_id for authentication
+      case 'gcp_list_projects':
+      case 'gcp_get_project':
+      case 'gcp_list_service_accounts':
+      case 'gcp_get_service_account':
+      case 'gcp_list_enabled_apis':
+      case 'gcp_enable_api':
+      case 'gcp_get_billing_info':
+      case 'gcp_list_billing_accounts': {
+        const userId = args.user_id as string;
+        if (!userId) {
+          return jsonRpcError(id, -32602, 'user_id is required for GCP tools', corsHeaders);
+        }
+        const client = createGoogleApiClient(tokenManager, userId);
+
+        switch (toolName) {
+          case 'gcp_list_projects':
+            result = await handleGcpListProjects(client, args);
+            break;
+          case 'gcp_get_project':
+            result = await handleGcpGetProject(client, args);
+            break;
+          case 'gcp_list_service_accounts':
+            result = await handleGcpListServiceAccounts(client, args);
+            break;
+          case 'gcp_get_service_account':
+            result = await handleGcpGetServiceAccount(client, args);
+            break;
+          case 'gcp_list_enabled_apis':
+            result = await handleGcpListEnabledApis(client, args);
+            break;
+          case 'gcp_enable_api':
+            result = await handleGcpEnableApi(client, args);
+            break;
+          case 'gcp_get_billing_info':
+            result = await handleGcpGetBillingInfo(client, args);
+            break;
+          case 'gcp_list_billing_accounts':
+            result = await handleGcpListBillingAccounts(client, args);
+            break;
+        }
+        break;
+      }
 
       default:
         return jsonRpcError(id, -32601, `Tool ${toolName} not found`, corsHeaders);
