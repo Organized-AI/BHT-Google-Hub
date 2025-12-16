@@ -42,6 +42,30 @@ import {
   handleGa4GetConversionEvent,
 } from './tools/ga4';
 
+// GTM Tools
+import {
+  GTM_TOOLS,
+  handleGtmListAccounts,
+  handleGtmGetAccount,
+  handleGtmListContainers,
+  handleGtmGetContainer,
+  handleGtmListWorkspaces,
+  handleGtmGetWorkspace,
+  handleGtmListTags,
+  handleGtmGetTag,
+  handleGtmCreateTag,
+  handleGtmUpdateTag,
+  handleGtmListTriggers,
+  handleGtmGetTrigger,
+  handleGtmCreateTrigger,
+  handleGtmListVariables,
+  handleGtmGetVariable,
+  handleGtmCreateVariable,
+  handleGtmListVersions,
+  handleGtmCreateVersion,
+  handleGtmPublishVersion,
+} from './tools/gtm';
+
 export interface Env {
   DB: D1Database;
   KV: KVNamespace;
@@ -139,7 +163,7 @@ const AUTH_TOOLS: Tool[] = [
 ];
 
 // All tools (will be expanded in each phase)
-const TOOLS: Tool[] = [...AUTH_TOOLS, ...GCP_TOOLS, ...GA4_TOOLS];
+const TOOLS: Tool[] = [...AUTH_TOOLS, ...GCP_TOOLS, ...GA4_TOOLS, ...GTM_TOOLS];
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -474,6 +498,94 @@ async function handleToolCall(
             break;
           case 'ga4_get_conversion_event':
             result = await handleGa4GetConversionEvent(client, args);
+            break;
+        }
+        break;
+      }
+
+      // GTM tools - require user_id for authentication
+      case 'gtm_list_accounts':
+      case 'gtm_get_account':
+      case 'gtm_list_containers':
+      case 'gtm_get_container':
+      case 'gtm_list_workspaces':
+      case 'gtm_get_workspace':
+      case 'gtm_list_tags':
+      case 'gtm_get_tag':
+      case 'gtm_create_tag':
+      case 'gtm_update_tag':
+      case 'gtm_list_triggers':
+      case 'gtm_get_trigger':
+      case 'gtm_create_trigger':
+      case 'gtm_list_variables':
+      case 'gtm_get_variable':
+      case 'gtm_create_variable':
+      case 'gtm_list_versions':
+      case 'gtm_create_version':
+      case 'gtm_publish_version': {
+        const userId = args.user_id as string;
+        if (!userId) {
+          return jsonRpcError(id, -32602, 'user_id is required for GTM tools', corsHeaders);
+        }
+        const client = createGoogleApiClient(tokenManager, userId);
+
+        switch (toolName) {
+          case 'gtm_list_accounts':
+            result = await handleGtmListAccounts(client, args);
+            break;
+          case 'gtm_get_account':
+            result = await handleGtmGetAccount(client, args);
+            break;
+          case 'gtm_list_containers':
+            result = await handleGtmListContainers(client, args);
+            break;
+          case 'gtm_get_container':
+            result = await handleGtmGetContainer(client, args);
+            break;
+          case 'gtm_list_workspaces':
+            result = await handleGtmListWorkspaces(client, args);
+            break;
+          case 'gtm_get_workspace':
+            result = await handleGtmGetWorkspace(client, args);
+            break;
+          case 'gtm_list_tags':
+            result = await handleGtmListTags(client, args);
+            break;
+          case 'gtm_get_tag':
+            result = await handleGtmGetTag(client, args);
+            break;
+          case 'gtm_create_tag':
+            result = await handleGtmCreateTag(client, args);
+            break;
+          case 'gtm_update_tag':
+            result = await handleGtmUpdateTag(client, args);
+            break;
+          case 'gtm_list_triggers':
+            result = await handleGtmListTriggers(client, args);
+            break;
+          case 'gtm_get_trigger':
+            result = await handleGtmGetTrigger(client, args);
+            break;
+          case 'gtm_create_trigger':
+            result = await handleGtmCreateTrigger(client, args);
+            break;
+          case 'gtm_list_variables':
+            result = await handleGtmListVariables(client, args);
+            break;
+          case 'gtm_get_variable':
+            result = await handleGtmGetVariable(client, args);
+            break;
+          case 'gtm_create_variable':
+            result = await handleGtmCreateVariable(client, args);
+            break;
+          case 'gtm_list_versions':
+            result = await handleGtmListVersions(client, args);
+            break;
+          case 'gtm_create_version':
+            result = await handleGtmCreateVersion(client, args);
+            break;
+          case 'gtm_publish_version':
+            result = await handleGtmPublishVersion(client, args);
             break;
         }
         break;
