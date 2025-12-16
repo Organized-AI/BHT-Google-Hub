@@ -13,16 +13,32 @@ This project implements a Remote MCP Server with 54 tools for:
 
 ## Quick Start
 
+### ⚠️ MUST USE AUTONOMOUS MODE
+
 ```bash
 # Navigate to project
 cd /Users/supabowl/Library/Mobile\ Documents/com~apple~CloudDocs/BHT\ Promo\ iCloud/Organized\ AI/Windsurf/google-marketing-hub-mcp
 
-# Launch Claude Code
+# Launch Claude Code in AUTONOMOUS MODE (required!)
 claude --dangerously-skip-permissions
-
-# Start with Phase 0
-Read PLANNING/phase-0-setup.md and execute all tasks.
 ```
+
+### Autonomous Build Prompt (Copy-Paste This)
+
+```
+Read PLANNING/phase-0-setup.md and execute all tasks.
+After completing each phase, AUTOMATICALLY proceed to the next phase prompt.
+Create PLANNING/PHASE-X-COMPLETE.md after each phase and git commit.
+Do NOT wait for user approval between phases - continue autonomously until all phases complete.
+If approval prompts appear, STOP and remind me to restart with: claude --dangerously-skip-permissions
+```
+
+### Permissions Check
+
+**Claude must verify autonomous mode before each phase:**
+- If approval prompts appear → NOT in autonomous mode → STOP and warn user
+- Expected: All operations execute without user interaction
+- User can leave and return to find the build complete
 
 ## Project Structure
 
@@ -112,3 +128,15 @@ git add -A
 git commit -m "feat(phase-X): [Phase Name] complete"
 git push origin main
 ```
+
+## Build Behavior
+
+**Autonomous Mode Requirements:**
+1. All `PHASE-X-COMPLETE.md` files go in `PLANNING/` directory
+2. After completing a phase, immediately read and execute the next phase
+3. Do NOT wait for user approval between phases
+4. If approval prompts appear, STOP and display:
+   ```
+   ⚠️ NOT IN AUTONOMOUS MODE
+   Please restart with: claude --dangerously-skip-permissions
+   ```

@@ -149,14 +149,16 @@ Generate `CLAUDE-CODE-PHASE-0.md` at project root for easy copy-paste into Claud
 PROJECT/
 ├── PLANNING/
 │   ├── IMPLEMENTATION-MASTER-PLAN.md
+│   ├── PHASE-0-COMPLETE.md (created after phase 0)
+│   ├── PHASE-1-COMPLETE.md (created after phase 1)
 │   └── implementation-phases/
 │       ├── PHASE-0-PROMPT.md
-│       ├── PHASE-1-PROMPT.md
-│       ├── PHASE-0-COMPLETE.md (created after)
-│       └── PHASE-1-COMPLETE.md (created after)
+│       └── PHASE-1-PROMPT.md
 ├── CLAUDE-CODE-PHASE-0.md (quick-start prompt)
 └── CLAUDE.md (updated with phase tracking)
 ```
+
+**Note:** All `PHASE-X-COMPLETE.md` files go in `PLANNING/` directory, NOT in `implementation-phases/`.
 
 ---
 
@@ -198,22 +200,57 @@ Proceed to Phase [X+1]: [NAME]
 
 ## Execution Protocol
 
+### CRITICAL: Autonomous Build Mode
+
+**ALWAYS run with `--dangerously-skip-permissions` for uninterrupted builds.**
+
+Before executing ANY phase task, verify autonomous mode:
+```bash
+# Check if running in dangerously-skip-permissions mode
+# If user approval prompts appear, STOP and remind user to restart with:
+claude --dangerously-skip-permissions
+```
+
 ### Starting a Phase
 
 ```bash
 cd [project]
 claude --dangerously-skip-permissions
 
-# In Claude Code:
-"Read PLANNING/implementation-phases/PHASE-X-PROMPT.md and execute all tasks"
+# In Claude Code - AUTONOMOUS BUILD PROMPT:
+"Read PLANNING/implementation-phases/PHASE-0-PROMPT.md and execute all tasks.
+After completing each phase, automatically proceed to the next phase prompt
+until all phases are complete. Create PLANNING/PHASE-X-COMPLETE.md after each
+phase and git commit your changes. Do not wait for user approval between phases."
 ```
+
+### Auto-Progression Protocol
+
+**After completing a phase:**
+1. ✅ Verify all success criteria
+2. ✅ Create `PLANNING/PHASE-X-COMPLETE.md`
+3. ✅ Git commit with phase message
+4. ✅ **AUTOMATICALLY read and execute next phase** - DO NOT wait for user
+5. ✅ Repeat until final phase complete
+
+**If NOT in `--dangerously-skip-permissions` mode:**
+- You will see approval prompts
+- STOP and display this message to user:
+  ```
+  ⚠️ NOT IN AUTONOMOUS MODE
+
+  Please restart Claude Code with:
+  claude --dangerously-skip-permissions
+
+  Then paste the build prompt again.
+  ```
 
 ### Completing a Phase
 
 1. Verify all success criteria checkboxes
-2. Create `PHASE-X-COMPLETE.md` from template
+2. Create `PLANNING/PHASE-X-COMPLETE.md` from template
 3. Git commit with phase message
-4. Move to next phase
+4. **Immediately proceed to next phase** (do not wait for user)
 
 ---
 

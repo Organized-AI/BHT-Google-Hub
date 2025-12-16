@@ -12,16 +12,17 @@
 - [x] /health endpoint responds
 - [x] **PHASE-0-COMPLETE.md created**
 
-## Phase 1: Auth Layer (4 tools)
-- [ ] src/lib/token-manager.ts implemented
-- [ ] src/lib/google-api-client.ts implemented
-- [ ] ghub_auth_init
-- [ ] ghub_auth_callback
-- [ ] ghub_auth_status
-- [ ] ghub_auth_revoke
-- [ ] OAuth flow works end-to-end
-- [ ] Token refresh works automatically
-- [ ] **PHASE-1-COMPLETE.md created**
+## Phase 1: Auth Layer (4 tools) ✅
+- [x] src/lib/token-manager.ts implemented
+- [x] src/lib/google-api-client.ts implemented
+- [x] ghub_auth_init
+- [x] ghub_auth_callback (via OAuth flow)
+- [x] ghub_auth_status
+- [x] ghub_auth_revoke
+- [x] ghub_auth_list (bonus tool)
+- [x] OAuth flow works end-to-end
+- [x] Token refresh works automatically
+- [x] **PHASE-1-COMPLETE.md created**
 
 ## Phase 2: GCP Tools (8 tools)
 - [ ] ghub_gcp_list_projects
@@ -125,7 +126,7 @@
 | Phase | Tools | Status |
 |-------|-------|--------|
 | 0 | 0 | ✅ |
-| 1 | 4 | ⏳ |
+| 1 | 4 | ✅ |
 | 2 | 8 | ⏳ |
 | 3 | 11 | ⏳ |
 | 4 | 19 | ⏳ |

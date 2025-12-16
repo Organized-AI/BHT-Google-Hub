@@ -280,13 +280,40 @@ After completing Phase 1 (Auth), configure Claude Desktop:
 
 ## Quick Start
 
+### ⚠️ CRITICAL: Autonomous Mode Required
+
+**MUST run with `--dangerously-skip-permissions` for hands-free builds.**
+
+```bash
+cd google-marketing-hub-mcp
+claude --dangerously-skip-permissions
+```
+
+### Autonomous Build Prompt (Copy-Paste)
+
 ```
 Read PLANNING/phase-0-setup.md and execute all tasks.
 Use flat src/ structure (not packages/mcp-server/).
-Create PHASE-0-COMPLETE.md when done and proceed to Phase 1.
-After completing each phase, automatically proceed to the next phase.
-Create PHASE-X-COMPLETE.md after each phase and git commit your changes.
+Create PLANNING/PHASE-0-COMPLETE.md when done and proceed to Phase 1.
+After completing each phase, AUTOMATICALLY proceed to the next phase.
+Create PLANNING/PHASE-X-COMPLETE.md after each phase and git commit.
+Do NOT wait for user approval between phases - continue autonomously.
+If you encounter approval prompts, STOP and remind user to restart with:
+  claude --dangerously-skip-permissions
 ```
+
+### Permissions Check Protocol
+
+**Before each phase, verify autonomous mode:**
+- If tool calls require approval → NOT in autonomous mode
+- Display warning and stop execution
+- User must restart with `--dangerously-skip-permissions`
+
+**Expected behavior in autonomous mode:**
+- All file operations execute without prompts
+- All bash commands execute without prompts
+- Phase transitions happen automatically
+- User can leave and return to find build complete
 
 ---
 
