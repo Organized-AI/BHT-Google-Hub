@@ -1,0 +1,32 @@
+name = "google-marketing-hub-mcp"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+# D1 Database - run: wrangler d1 create ghub-tokens
+# Then update database_id below
+[[d1_databases]]
+binding = "DB"
+database_name = "ghub-tokens"
+database_id = "59d0e0f6-8188-48a1-ae92-b846e0b780da"
+
+# KV Namespace - run: wrangler kv:namespace create sessions
+# Then update id below
+[[kv_namespaces]]
+binding = "KV"
+id = "104c355b4c504bc6a8fafd846034e35f"
+
+# Environment variables (non-secret)
+[vars]
+ENVIRONMENT = "development"
+MCP_SERVER_NAME = "google-marketing-hub-mcp"
+MCP_SERVER_VERSION = "0.1.0"
+
+# Secrets (set via wrangler secret put):
+# - GOOGLE_CLIENT_ID
+# - GOOGLE_CLIENT_SECRET
+
+# Local development
+[dev]
+port = 8787
+local_protocol = "http"

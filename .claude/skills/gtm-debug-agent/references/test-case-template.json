@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GTM Debug Test Case",
+  "description": "Template for defining GTM debugging test scenarios",
+  
+  "example": {
+    "testName": "E-commerce Purchase Flow",
+    "description": "Validates that purchase tracking fires correctly after checkout completion",
+    "gtmContainerId": "GTM-XXXXXXX",
+    "targetUrl": "https://example.com/checkout",
+    "prerequisites": {
+      "itemsInCart": true,
+      "userLoggedIn": false
+    },
+    "actions": [
+      {
+        "type": "wait",
+        "selector": "#checkout-form",
+        "timeout": 5000,
+        "description": "Wait for checkout form to load"
+      },
+      {
+        "type": "fill",
+        "selector": "#email",
+        "value": "test@example.com",
+        "description": "Enter email address"
+      },
+      {
+        "type": "fill",
+        "selector": "#card-number",
+        "value": "4111111111111111",
+        "description": "Enter test card number"
+      },
+      {
+        "type": "click",
+        "selector": "#submit-order",
+        "description": "Submit the order"
+      },
+      {
+        "type": "wait",
+        "selector": ".order-confirmation",
+        "timeout": 10000,
+        "description": "Wait for confirmation page"
+      },
+      {
+        "type": "capture",
+        "name": "post_purchase",
+        "description": "Capture final dataLayer state"
+      }
+    ],
+    "expectedOutcomes": {
+      "tagsFired": [
+        "GA4 - Purchase",
+        "Meta Pixel - Purchase",
+        "Google Ads - Conversion"
+      ],
+      "tagsNotFired": [],
+      "dataLayerEvents": [
+        "purchase"
+      ],
+      "dataLayerContains": {
+        "ecommerce.transaction_id": "*",
+        "ecommerce.value": "*",
+        "ecommerce.currency": "USD",
+        "ecommerce.items": "*"
+      },
+      "networkRequests": {
+        "ga4": true,
+        "metaPixel": true
+      }
+    },
+    "metadata": {
+      "author": "QA Team",
+      "lastUpdated": "2024-01-15",
+      "priority": "high",
+      "tags": ["ecommerce", "purchase", "critical-path"]
+    }
+  },
+  
+  "actionTypes": {
+    "click": {
+      "description": "Click an element",
+      "params": ["selector", "timeout?"]
+    },
+    "fill": {
+      "description": "Fill a form field",
+      "params": ["selector", "value", "timeout?"]
+    },
+    "scroll": {
+      "description": "Scroll the page",
+      "params": ["target (number|'bottom'|'top')"]
+    },
+    "wait": {
+      "description": "Wait for element or duration",
+      "params": ["selector?", "duration?", "timeout?"]
+    },
+    "navigate": {
+      "description": "Navigate to URL",
+      "params": ["url"]
+    },
+    "capture": {
+      "description": "Capture current dataLayer state",
+      "params": ["name"]
+    },
+    "hover": {
+      "description": "Hover over element",
+      "params": ["selector", "timeout?"]
+    },
+    "select": {
+      "description": "Select dropdown option",
+      "params": ["selector", "value"]
+    }
+  },
+  
+  "templates": {
+    "pageViewTest": {
+      "testName": "Page View Tracking",
+      "actions": [
+        {"type": "wait", "duration": 2000},
+        {"type": "capture", "name": "page_load"}
+      ],
+      "expectedOutcomes": {
+        "dataLayerEvents": ["page_view"],
+        "tagsFired": ["GA4 - Page View"]
+      }
+    },
+    
+    "formSubmitTest": {
+      "testName": "Form Submission Tracking",
+      "actions": [
+        {"type": "fill", "selector": "#name", "value": "Test User"},
+        {"type": "fill", "selector": "#email", "value": "test@example.com"},
+        {"type": "click", "selector": "#submit"},
+        {"type": "wait", "selector": ".success-message", "timeout": 5000},
+        {"type": "capture", "name": "form_submitted"}
+      ],
+      "expectedOutcomes": {
+        "dataLayerEvents": ["form_submit", "generate_lead"],
+        "tagsFired": ["GA4 - Generate Lead"]
+      }
+    },
+    
+    "scrollTrackingTest": {
+      "testName": "Scroll Depth Tracking",
+      "actions": [
+        {"type": "scroll", "target": 500},
+        {"type": "wait", "duration": 1000},
+        {"type": "scroll", "target": "bottom"},
+        {"type": "wait", "duration": 1000},
+        {"type": "capture", "name": "scroll_complete"}
+      ],
+      "expectedOutcomes": {
+        "dataLayerEvents": ["scroll"],
+        "tagsFired": ["GA4 - Scroll Depth"]
+      }
+    }
+  }
+}
