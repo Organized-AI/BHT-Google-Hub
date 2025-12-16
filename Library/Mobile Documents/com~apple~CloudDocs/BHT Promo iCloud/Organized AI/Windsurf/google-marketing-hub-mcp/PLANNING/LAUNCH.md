@@ -33,37 +33,37 @@ Claude Desktop → SSE (/sse) → Cloudflare Workers → Google APIs
 
 ### Phase 0: Setup (Required First)
 ```
-Read .claude/prompts/phase-0-setup.md
+Read PLANNING/phase-0-setup.md
 Tasks: wrangler login, D1 create, KV create, secrets, deploy
 ```
 
 ### Phase 1: Auth Layer
 ```
-Read .claude/prompts/phase-1-auth.md
+Read PLANNING/phase-1-auth.md
 Tasks: TokenManager, GoogleApiClient, auto-refresh
 ```
 
 ### Phase 2: GCP Tools (8)
 ```
-Read .claude/prompts/phase-2-gcp.md
+Read PLANNING/phase-2-gcp.md
 Tasks: Projects, Service Accounts, APIs, Billing
 ```
 
 ### Phase 3: GA4 Tools (11)
 ```
-Read .claude/prompts/phase-3-ga4.md
+Read PLANNING/phase-3-ga4.md
 Tasks: Properties, Streams, Reports, Audiences, Conversions
 ```
 
 ### Phase 4: GTM Tools (19)
 ```
-Read .claude/prompts/phase-4-gtm.md
+Read PLANNING/phase-4-gtm.md
 Tasks: Accounts, Containers, Workspaces, Tags, Triggers, Variables, Versions
 ```
 
 ### Phase 5: Google Ads Tools (12)
 ```
-Read .claude/prompts/phase-5-gads.md
+Read PLANNING/phase-5-gads.md
 Tasks: Accounts, Campaigns, Reports, Health
 ```
 
@@ -76,9 +76,10 @@ You are developing the Google Marketing Hub Remote MCP Server.
 /Users/supabowl/Library/Mobile Documents/com~apple~CloudDocs/BHT Promo iCloud/Organized AI/Windsurf/google-marketing-hub-mcp
 
 ## Key Files
-- packages/mcp-server/src/index.ts - Main server entry
-- packages/mcp-server/wrangler.toml - Cloudflare config
-- .claude/prompts/*.md - Phase implementation guides
+- src/index.ts - Main server entry
+- wrangler.toml - Cloudflare config
+- PLANNING/*.md - Phase implementation guides
+- .claude/agents/google-hub-orchestrator.md - Build orchestrator
 
 ## Current Phase
 [READ THE APPROPRIATE PHASE FILE BEFORE STARTING]

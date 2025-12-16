@@ -10,7 +10,7 @@ Set up the Google Marketing Hub Remote MCP Server on Cloudflare Workers with D1 
 
 ## Commands
 ```bash
-cd /Users/supabowl/Library/Mobile\ Documents/com~apple~CloudDocs/BHT\ Promo\ iCloud/Organized\ AI/Windsurf/google-marketing-hub-mcp/packages/mcp-server
+cd /Users/supabowl/Library/Mobile\ Documents/com~apple~CloudDocs/BHT\ Promo\ iCloud/Organized\ AI/Windsurf/google-marketing-hub-mcp
 
 claude --dangerously-skip-permissions
 ```
