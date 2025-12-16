@@ -66,6 +66,23 @@ import {
   handleGtmPublishVersion,
 } from './tools/gtm';
 
+// Google Ads Tools
+import {
+  GADS_TOOLS,
+  handleGadsListAccounts,
+  handleGadsGetAccount,
+  handleGadsListCampaigns,
+  handleGadsGetCampaign,
+  handleGadsUpdateCampaignStatus,
+  handleGadsUpdateCampaignBudget,
+  handleGadsRunReport,
+  handleGadsGetCampaignPerformance,
+  handleGadsGetKeywordPerformance,
+  handleGadsGetSearchTermsReport,
+  handleGadsGetChangeHistory,
+  handleGadsGetRecommendations,
+} from './tools/gads';
+
 export interface Env {
   DB: D1Database;
   KV: KVNamespace;
@@ -163,7 +180,7 @@ const AUTH_TOOLS: Tool[] = [
 ];
 
 // All tools (will be expanded in each phase)
-const TOOLS: Tool[] = [...AUTH_TOOLS, ...GCP_TOOLS, ...GA4_TOOLS, ...GTM_TOOLS];
+const TOOLS: Tool[] = [...AUTH_TOOLS, ...GCP_TOOLS, ...GA4_TOOLS, ...GTM_TOOLS, ...GADS_TOOLS];
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -586,6 +603,66 @@ async function handleToolCall(
             break;
           case 'gtm_publish_version':
             result = await handleGtmPublishVersion(client, args);
+            break;
+        }
+        break;
+      }
+
+      // Google Ads tools - require user_id for authentication
+      case 'gads_list_accounts':
+      case 'gads_get_account':
+      case 'gads_list_campaigns':
+      case 'gads_get_campaign':
+      case 'gads_update_campaign_status':
+      case 'gads_update_campaign_budget':
+      case 'gads_run_report':
+      case 'gads_get_campaign_performance':
+      case 'gads_get_keyword_performance':
+      case 'gads_get_search_terms_report':
+      case 'gads_get_change_history':
+      case 'gads_get_recommendations': {
+        const userId = args.user_id as string;
+        if (!userId) {
+          return jsonRpcError(id, -32602, 'user_id is required for Google Ads tools', corsHeaders);
+        }
+        const client = createGoogleApiClient(tokenManager, userId);
+
+        switch (toolName) {
+          case 'gads_list_accounts':
+            result = await handleGadsListAccounts(client, args);
+            break;
+          case 'gads_get_account':
+            result = await handleGadsGetAccount(client, args);
+            break;
+          case 'gads_list_campaigns':
+            result = await handleGadsListCampaigns(client, args);
+            break;
+          case 'gads_get_campaign':
+            result = await handleGadsGetCampaign(client, args);
+            break;
+          case 'gads_update_campaign_status':
+            result = await handleGadsUpdateCampaignStatus(client, args);
+            break;
+          case 'gads_update_campaign_budget':
+            result = await handleGadsUpdateCampaignBudget(client, args);
+            break;
+          case 'gads_run_report':
+            result = await handleGadsRunReport(client, args);
+            break;
+          case 'gads_get_campaign_performance':
+            result = await handleGadsGetCampaignPerformance(client, args);
+            break;
+          case 'gads_get_keyword_performance':
+            result = await handleGadsGetKeywordPerformance(client, args);
+            break;
+          case 'gads_get_search_terms_report':
+            result = await handleGadsGetSearchTermsReport(client, args);
+            break;
+          case 'gads_get_change_history':
+            result = await handleGadsGetChangeHistory(client, args);
+            break;
+          case 'gads_get_recommendations':
+            result = await handleGadsGetRecommendations(client, args);
             break;
         }
         break;
