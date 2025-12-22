@@ -118,9 +118,57 @@ class iCalTokenBridge:
 
         return metadata
 
-    def predict_session_tokens(self, duration_hours: float, metadata: Dict) -> Dict:
+    def get_time_of_day_modifier(self, hour: Optional[int] = None) -> Dict:
+        """
+        Calculate efficiency modifier based on time of day.
+
+        Based on planning docs:
+        - Early morning (5 AM - 9 AM): +20% efficiency (use fewer tokens)
+        - Normal hours (9 AM - 6 PM): baseline
+        - Evening (6 PM - 10 PM): -10% efficiency
+        - Late night (10 PM - 5 AM): -20% efficiency
+
+        Returns:
+            modifier: Multiplier for token estimates (lower = more efficient)
+            period: Time period name
+            efficiency_bonus: Human-readable efficiency description
+        """
+        if hour is None:
+            hour = datetime.now().hour
+
+        if 5 <= hour < 9:
+            return {
+                'modifier': 0.8,
+                'period': 'early_morning',
+                'efficiency_bonus': '+20% efficiency'
+            }
+        elif 9 <= hour < 18:
+            return {
+                'modifier': 1.0,
+                'period': 'normal_hours',
+                'efficiency_bonus': 'baseline'
+            }
+        elif 18 <= hour < 22:
+            return {
+                'modifier': 1.1,
+                'period': 'evening',
+                'efficiency_bonus': '-10% efficiency'
+            }
+        else:  # 22-5 AM
+            return {
+                'modifier': 1.2,
+                'period': 'late_night',
+                'efficiency_bonus': '-20% efficiency'
+            }
+
+    def predict_session_tokens(self, duration_hours: float, metadata: Dict, session_hour: Optional[int] = None) -> Dict:
         """
         Predict token usage for a coding session
+
+        Args:
+            duration_hours: Session length in hours
+            metadata: Session metadata (complexity, project, etc.)
+            session_hour: Optional hour (0-23) for the session start. If None, uses current time.
 
         Returns:
             base_estimate: Conservative estimate
@@ -144,19 +192,20 @@ class iCalTokenBridge:
         rate = self.token_rates[complexity]
         base = int(duration_hours * rate)
 
-        # Adjust for time of day (from planning docs)
-        # Early morning: +20% efficiency
-        # Late evening: -20% efficiency
-        # TODO: Can be enhanced with actual time
+        # Adjust for time of day
+        time_info = self.get_time_of_day_modifier(session_hour)
+        adjusted_base = int(base * time_info['modifier'])
 
         return {
-            'base': base,
-            'buffer': int(base * 0.2),
-            'max': int(base * 1.5),
+            'base': adjusted_base,
+            'buffer': int(adjusted_base * 0.2),
+            'max': int(adjusted_base * 1.5),
             'confidence': 0.7,  # Lower confidence for rule-based
             'method': 'rule-based',
             'rate_used': f"{rate}/hour",
-            'complexity': complexity
+            'complexity': complexity,
+            'time_period': time_info['period'],
+            'time_adjustment': time_info['efficiency_bonus']
         }
 
     def estimate_cost(self, tokens: int, model: str = 'sonnet') -> float:
@@ -218,6 +267,8 @@ class iCalTokenBridge:
         log(f"🔨 {demo_session['title']}", 'bold')
         log(f"   Time: {demo_session['start']} ({demo_session['duration_hours']}h)", 'cyan')
         log(f"   Complexity: {prediction['complexity']}", 'yellow')
+        if 'time_adjustment' in prediction:
+            log(f"   Time Adjustment: {prediction['time_adjustment']} ({prediction['time_period']})", 'blue')
         log(f"   Estimated: {prediction['base']:,} tokens (±{prediction['buffer']:,})", 'green')
         log(f"   Max: {prediction['max']:,} tokens", 'red')
         log(f"   Cost: ${self.estimate_cost(prediction['base'], 'sonnet'):.2f} (Sonnet)", 'magenta')
@@ -267,6 +318,8 @@ class iCalTokenBridge:
 
         # Display results
         log(f"\n📊 Session Prediction:", 'bold')
+        if 'time_adjustment' in prediction:
+            log(f"   Time Adjustment: {prediction['time_adjustment']} ({prediction['time_period']})", 'blue')
         log(f"   Estimated: {prediction['base']:,} tokens", 'green')
         log(f"   Buffer: ±{prediction['buffer']:,} tokens", 'yellow')
         log(f"   Maximum: {prediction['max']:,} tokens", 'red')
