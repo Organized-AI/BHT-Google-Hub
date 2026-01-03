@@ -1,0 +1,47 @@
+{
+  "project": "BLADE LinkedIn Insight Tag",
+  "currentPhase": 0,
+  "status": "ready",
+  "phases": {
+    "0": {
+      "name": "Template Installation",
+      "status": "pending",
+      "artifacts": {},
+      "completedAt": null
+    },
+    "1": {
+      "name": "Variable Creation",
+      "status": "pending",
+      "artifacts": {},
+      "completedAt": null
+    },
+    "2": {
+      "name": "Tag Creation",
+      "status": "pending",
+      "artifacts": {},
+      "completedAt": null
+    },
+    "3": {
+      "name": "Validation",
+      "status": "pending",
+      "artifacts": {},
+      "completedAt": null
+    },
+    "4": {
+      "name": "Test & Publish",
+      "status": "pending",
+      "artifacts": {},
+      "completedAt": null
+    }
+  },
+  "userInput": {
+    "linkedInPartnerId": null,
+    "providedAt": null
+  },
+  "gtm": {
+    "accountId": "4702245012",
+    "containerId": "42412215",
+    "workspaceId": "86"
+  },
+  "history": []
+}

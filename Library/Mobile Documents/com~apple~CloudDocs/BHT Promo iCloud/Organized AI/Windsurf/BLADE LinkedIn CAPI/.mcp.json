@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "stape-mcp-server": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.stape.ai/sse",
+        "--header",
+        "Authorization: c8420c93dd0aff31ac92207dec626843775210b7"
+      ]
+    },
+    "google-tag-manager-mcp-server": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://gtm-mcp.stape.ai/mcp"
+      ]
+    }
+  }
+}

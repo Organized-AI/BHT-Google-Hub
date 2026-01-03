@@ -1,0 +1,40 @@
+{
+  "model": "claude-sonnet-4-20250514",
+  "dangerouslySkipPermissions": true,
+  "contextWindow": "200k",
+  "projectName": "BLADE-LinkedIn-Insight-Tag",
+  "description": "LinkedIn Insight Tag implementation for BLADE Westchester campaign",
+  "tags": ["gtm", "linkedin", "tracking", "capi", "blade", "phased-planning"],
+  "agents": {
+    "gtm-linkedin": {
+      "name": "GTM LinkedIn Automation Agent",
+      "description": "Autonomous agent for complete LinkedIn Insight Tag deployment using phased execution",
+      "file": "agents/gtm-linkedin-automation-agent.md",
+      "triggers": [
+        "deploy linkedin",
+        "install linkedin",
+        "run gtm automation",
+        "execute blade linkedin",
+        "start linkedin implementation"
+      ]
+    }
+  },
+  "defaultAgent": "gtm-linkedin",
+  "mcpServers": ["google-tag-manager-mcp-server", "stape-mcp-server"],
+  "phasedPlanning": {
+    "enabled": true,
+    "masterPlan": "PLANNING/IMPLEMENTATION-MASTER-PLAN.md",
+    "phasesDir": "PLANNING/implementation-phases/",
+    "phases": [
+      {"id": 0, "name": "Template Installation", "prompt": "PHASE-0-PROMPT.md"},
+      {"id": 1, "name": "Variable Creation", "prompt": "PHASE-1-PROMPT.md"},
+      {"id": 2, "name": "Tag Creation", "prompt": "PHASE-2-PROMPT.md"},
+      {"id": 3, "name": "Validation", "prompt": "PHASE-3-PROMPT.md"},
+      {"id": 4, "name": "Test & Publish", "prompt": "PHASE-4-PROMPT.md"}
+    ]
+  },
+  "hooks": {
+    "prePhase": "Check MCP authentication status",
+    "postPhase": "Create PHASE-X-COMPLETE.md with results"
+  }
+}

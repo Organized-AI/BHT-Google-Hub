@@ -1,0 +1,70 @@
+{
+  "project": {
+    "name": "BLADE LinkedIn Insight Tag",
+    "client": "BLADE (Myosin Airport Products)",
+    "campaign": "Westchester LinkedIn",
+    "created": "2024-12-29",
+    "innovation": "Automated Community Gallery template installation via GTM API"
+  },
+  "gtm": {
+    "accountId": "4702245012",
+    "webContainer": {
+      "id": "42412215",
+      "name": "www.blade.com",
+      "publicId": "GTM-W9S77T7"
+    },
+    "serverContainer": {
+      "id": "175099610", 
+      "name": "ServerSide - Blade",
+      "publicId": "GTM-KJHX6KJ7"
+    },
+    "workspace": {
+      "id": "86",
+      "name": "Default Workspace"
+    }
+  },
+  "linkedin": {
+    "partnerId": "1009266",
+    "templateId": "[AUTO_GENERATED_AFTER_INSTALL]",
+    "gallery": {
+      "host": "github.com",
+      "owner": "linkedin",
+      "repository": "linkedin-gtm-community-template",
+      "latestSha": "c07099c0e0cf0ade2057ee4016d3da9f32959169",
+      "templateDeveloperId": "github.com_linkedin",
+      "rawUrl": "https://raw.githubusercontent.com/linkedin/linkedin-gtm-community-template/main/template.tpl"
+    },
+    "conversions": {
+      "lead": {
+        "id": "25208314",
+        "name": "Lead",
+        "status": "existing"
+      },
+      "purchase": {
+        "id": "25211994",
+        "name": "Purchase",
+        "status": "configured"
+      }
+    }
+  },
+  "triggers": {
+    "allPages": {"id": "2147479553", "name": "All Pages"},
+    "purchase": {"id": "10", "name": "Purchase"},
+    "completeRegistration": {"id": "305", "name": "CompleteRegistration"}
+  },
+  "existingVariables": {
+    "dlEmail": "{{DL_email}}",
+    "dlFirstName": "{{DL_first_name}}",
+    "dlLastName": "{{DL_last_name}}",
+    "dlEventId": "{{DL_event_id}}",
+    "dlTransactionId": "{{DL_transaction_id}}"
+  },
+  "_instructions": {
+    "step1": "Get LinkedIn Partner ID from Campaign Manager → Account Assets → Insight Tag",
+    "step2": "Run: claude --dangerously-skip-permissions",
+    "step3": "Say: Deploy LinkedIn tracking for BLADE",
+    "step4": "Template installs automatically from Community Gallery!",
+    "step5": "Variables and tags created automatically",
+    "step6": "Preview generated, version created, published automatically"
+  }
+}

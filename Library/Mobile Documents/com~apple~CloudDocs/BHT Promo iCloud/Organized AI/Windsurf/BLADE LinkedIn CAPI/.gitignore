@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Cache
+.cache/
+.npm/
+
+# Temporary files
+tmp/
+temp/
+
+# Archive (keep in git but ignore regenerable content)
+.archive/regenerable/
+
+# MCP auth (sensitive - never commit)
+# Note: This is typically in ~/.mcp-auth, not in project
