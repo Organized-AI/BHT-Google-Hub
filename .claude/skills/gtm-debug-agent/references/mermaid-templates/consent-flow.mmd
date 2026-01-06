@@ -1,0 +1,28 @@
+%%{init: {'theme': 'base'}}%%
+flowchart TD
+    START["🚀 Page Load"] --> INIT["Initialize GTM"]
+    INIT --> CONSENT{"🍪 Consent<br/>Required?"}
+    
+    CONSENT -->|"No (Non-EU)"| FULL["✅ Full Consent"]
+    CONSENT -->|"Yes (EU/GDPR)"| BANNER["Show Consent Banner"]
+    
+    BANNER --> CHOICE{"User Choice?"}
+    
+    CHOICE -->|"Accept All"| ACCEPT["✅ All Granted"]
+    CHOICE -->|"Reject All"| REJECT["❌ All Denied"]  
+    CHOICE -->|"Customize"| CUSTOM["⚙️ Custom Selection"]
+    
+    ACCEPT --> TRACKING["Full Tracking Enabled"]
+    REJECT --> BASIC["Basic Measurement Only"]
+    CUSTOM --> PARTIAL["Conditional Tracking"]
+    FULL --> TRACKING
+    
+    subgraph STATES["Consent States"]
+        TRACKING --> AD["ad_storage: granted<br/>analytics_storage: granted<br/>ad_user_data: granted"]
+        BASIC --> DENIED["ad_storage: denied<br/>analytics_storage: denied<br/>ad_user_data: denied"]
+        PARTIAL --> MIXED["Mixed based on selection"]
+    end
+    
+    style ACCEPT fill:#e6f4ea,stroke:#34a853
+    style REJECT fill:#fce8e6,stroke:#ea4335
+    style CUSTOM fill:#fef7e0,stroke:#fbbc04

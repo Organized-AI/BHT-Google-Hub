@@ -1,0 +1,27 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4285f4', 'secondaryColor': '#34a853'}}}%%
+sequenceDiagram
+    autonumber
+    participant User as 👤 User
+    participant Browser as 🌐 Browser
+    participant GTM as 📦 GTM Container
+    participant DL as 📊 dataLayer
+    participant Tag1 as 🏷️ [TAG_NAME_1]
+    participant Tag2 as 🏷️ [TAG_NAME_2]
+    participant Server as ☁️ Server-Side
+
+    User->>Browser: [USER_ACTION]
+    Browser->>DL: dataLayer.push({event: '[EVENT_NAME]'})
+    DL->>GTM: Event Received
+    GTM->>GTM: Evaluate Triggers
+    
+    alt Tag Fires Successfully
+        GTM->>Tag1: ✅ Fire Tag
+        GTM->>Tag2: ✅ Fire Tag
+    else Tag Blocked
+        GTM--xTag1: ❌ Consent Denied
+    end
+    
+    opt Server-Side Enabled
+        GTM->>Server: Forward Event
+        Server->>Server: Enrich Data
+    end

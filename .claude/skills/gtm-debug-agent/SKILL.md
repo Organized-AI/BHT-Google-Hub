@@ -1,6 +1,6 @@
 ---
 name: gtm-debug-agent
-description: Automated Google Tag Manager debugging with visual monitoring, screenshot annotation, and MCP integration. Use when testing GTM configurations, verifying tag firing, debugging dataLayer events, validating consent mode, checking tracking implementations, or automating GTM container builds with Stape/GTM MCP servers. Triggers on "debug GTM", "test GTM tags", "GTM preview", "verify tag firing", "check dataLayer", "monitor tags", "validate consent", "did my GTM fix work", "validate tracking", "annotate screenshot", "GTM QA", or when verifying configuration changes via browser automation.
+description: Comprehensive GTM debugging and workspace validation with browser automation. Use when: testing GTM configurations, verifying tag firing, debugging dataLayer events, validating consent mode, checking tracking implementations, automating GTM container builds, validating workspace before publishing, running automated QA tests, or verifying configuration changes. Triggers on "debug GTM", "test GTM tags", "GTM preview", "verify tag firing", "check dataLayer", "monitor tags", "validate consent", "did my GTM fix work", "validate tracking", "annotate screenshot", "GTM QA", "validate workspace", "test before publish", "is this safe to publish?", "run GTM validation".
 ---
 
 # GTM Debug Agent
@@ -446,3 +446,211 @@ async def automated_gtm_build_and_test(config):
         return {"status": "failed", "report": annotated_screenshots, 
                 "recommendations": debug_results.fix_recommendations}
 ```
+
+## Mermaid Chart MCP Integration
+
+Use the Mermaid Chart MCP to create professional architecture diagrams for GTM implementations, tracking flows, and debugging visualizations.
+
+### Prerequisites
+
+**MCP Configuration:**
+The project's `.mcp.json` includes the Mermaid Chart MCP:
+```json
+{
+  "mcpServers": {
+    "mermaid-chart": {
+      "type": "url",
+      "url": "https://mcp.mermaidchart.com/mcp",
+      "name": "mermaid-chart"
+    }
+  }
+}
+```
+
+### Diagram Types for GTM Debugging
+
+#### 1. Tag Firing Flow Diagram
+
+Visualize the sequence of events and tag firing:
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Browser
+    participant GTM
+    participant GA4
+    participant Meta
+    participant Stape
+
+    User->>Browser: Click Purchase Button
+    Browser->>GTM: dataLayer.push({event: 'purchase'})
+    GTM->>GTM: Evaluate Triggers
+    GTM->>GA4: GA4 Purchase Tag
+    GTM->>Meta: Meta Pixel Purchase
+    GTM->>Stape: Server-side Container
+    Stape->>GA4: GA4 Measurement Protocol
+    Stape->>Meta: Meta CAPI
+```
+
+#### 2. Container Architecture Diagram
+
+Show GTM container structure and dependencies:
+
+```mermaid
+flowchart TB
+    subgraph Client["Client-Side (GTM Web)"]
+        GTM[GTM Container<br/>GTM-XXXXXXX]
+        
+        subgraph Tags["Tags"]
+            GA4C[GA4 Config]
+            GA4E[GA4 Events]
+            META[Meta Pixel]
+            CHTML[Custom HTML]
+        end
+        
+        subgraph Triggers["Triggers"]
+            PV[Page View]
+            CLICK[Click Events]
+            DL[DataLayer Events]
+            CONSENT[Consent Update]
+        end
+        
+        subgraph Variables["Variables"]
+            DLV[DataLayer Vars]
+            URL[URL Variables]
+            1P[First Party Cookie]
+            CUSTOM[Custom JS]
+        end
+    end
+    
+    subgraph Server["Server-Side (Stape)"]
+        SGTM[sGTM Container]
+        GA4S[GA4 Tag]
+        METAS[Meta CAPI]
+        WEBHOOK[Webhooks]
+    end
+    
+    GTM --> SGTM
+    SGTM --> GA4S & METAS & WEBHOOK
+```
+
+#### 3. Consent Mode Decision Tree
+
+Visualize consent-based tag behavior:
+
+```mermaid
+flowchart TD
+    START[User Lands on Page] --> CONSENT{Consent<br/>Banner Shown?}
+    
+    CONSENT -->|No Banner| DEFAULT[Default Consent State]
+    CONSENT -->|Banner Shown| CHOICE{User Choice?}
+    
+    DEFAULT --> DENIED[analytics_storage: denied<br/>ad_storage: denied]
+    
+    CHOICE -->|Accept All| GRANTED[analytics_storage: granted<br/>ad_storage: granted]
+    CHOICE -->|Reject All| REJECTED[analytics_storage: denied<br/>ad_storage: denied]
+    CHOICE -->|Customize| PARTIAL[Mixed Consent State]
+    
+    GRANTED --> FULL[Full Tracking<br/>All Tags Fire]
+    REJECTED --> LIMITED[Basic Measurement<br/>Cookieless Pings]
+    DENIED --> LIMITED
+    PARTIAL --> CONDITIONAL[Conditional Firing<br/>Based on Permissions]
+```
+
+#### 4. Data Flow Architecture
+
+End-to-end tracking data flow:
+
+```mermaid
+flowchart LR
+    subgraph Website["Website"]
+        DL[dataLayer]
+        GTM[GTM Container]
+    end
+    
+    subgraph ServerSide["Server-Side"]
+        STAPE[Stape sGTM]
+        ENRICH[Data Enrichment]
+    end
+    
+    subgraph Endpoints["Marketing Platforms"]
+        GA4[Google Analytics 4]
+        META[Meta CAPI]
+        GADS[Google Ads]
+        TIKTOK[TikTok Events API]
+    end
+    
+    DL --> GTM
+    GTM -->|HTTP Request| STAPE
+    STAPE --> ENRICH
+    ENRICH --> GA4 & META & GADS & TIKTOK
+```
+
+### Mermaid MCP Tool Usage
+
+#### Creating Diagrams
+
+```python
+# Create a new diagram in Mermaid Chart
+mermaid_mcp.create_diagram(
+    title="GTM Container Architecture",
+    diagram_type="flowchart",
+    code="""
+    flowchart TB
+        GTM[GTM-XXXXXXX] --> GA4[GA4 Config]
+        GTM --> META[Meta Pixel]
+        GTM --> SGTM[Server Container]
+    """
+)
+
+# Get shareable link
+diagram_url = mermaid_mcp.get_diagram_url(diagram_id)
+```
+
+#### Automated Diagram Generation
+
+When generating debug reports, automatically create:
+
+1. **Pre-Debug Architecture** - Current state visualization
+2. **Tag Firing Sequence** - Actual event flow during test
+3. **Issue Highlight Diagram** - Red highlights on problem areas
+4. **Recommended Fix Flow** - Proposed solution architecture
+
+### Integration with Debug Workflow
+
+Add diagram generation to the debug report:
+
+```python
+async def generate_debug_report_with_diagrams(debug_results):
+    # Generate tag firing sequence diagram
+    sequence_diagram = f"""
+    sequenceDiagram
+        participant User
+        participant GTM
+        {''.join([f"participant {tag['name']}" for tag in debug_results.tags_fired])}
+        
+        User->>GTM: {debug_results.trigger_event}
+        {''.join([f"GTM->>{tag['name']}: Fire" for tag in debug_results.tags_fired])}
+    """
+    
+    # Create in Mermaid Chart
+    diagram = await mermaid_mcp.create_diagram(
+        title=f"GTM Debug - {debug_results.test_name}",
+        code=sequence_diagram
+    )
+    
+    return {
+        **debug_results,
+        "architecture_diagram_url": diagram.url
+    }
+```
+
+### Diagram Templates
+
+Store reusable templates in `references/mermaid-templates/`:
+
+- `tag-firing-sequence.mmd` - Basic tag firing flow
+- `container-architecture.mmd` - Full container structure
+- `consent-flow.mmd` - Consent mode decision tree
+- `data-flow.mmd` - End-to-end tracking architecture
+- `debug-issue.mmd` - Issue highlight template

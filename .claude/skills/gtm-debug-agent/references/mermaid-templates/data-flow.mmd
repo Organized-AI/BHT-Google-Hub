@@ -1,0 +1,45 @@
+%%{init: {'theme': 'base'}}%%
+flowchart LR
+    subgraph SOURCE["📱 Data Sources"]
+        WEB["Website"]
+        APP["Mobile App"]
+        CRM["CRM/Backend"]
+    end
+    
+    subgraph COLLECT["📥 Collection Layer"]
+        DL["dataLayer"]
+        SDK["SDK Events"]
+        API["Server Events"]
+    end
+    
+    subgraph PROCESS["⚙️ Processing"]
+        GTM["GTM Web"]
+        SGTM["Stape sGTM"]
+        ENRICH["Data Enrichment"]
+    end
+    
+    subgraph DEST["📤 Destinations"]
+        GA4["Google Analytics 4"]
+        META["Meta CAPI"]
+        GADS["Google Ads"]
+        TIKTOK["TikTok Events"]
+        CUSTOM["Custom Endpoints"]
+    end
+    
+    WEB --> DL
+    APP --> SDK
+    CRM --> API
+    
+    DL --> GTM
+    SDK --> GTM
+    API --> SGTM
+    
+    GTM --> SGTM
+    SGTM --> ENRICH
+    
+    ENRICH --> GA4 & META & GADS & TIKTOK & CUSTOM
+    
+    style SOURCE fill:#e8f0fe,stroke:#4285f4
+    style COLLECT fill:#fef7e0,stroke:#fbbc04
+    style PROCESS fill:#e6f4ea,stroke:#34a853
+    style DEST fill:#f3e8fd,stroke:#9334e6

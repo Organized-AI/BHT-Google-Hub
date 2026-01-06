@@ -1,0 +1,46 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#4285f4'}}}%%
+flowchart TB
+    subgraph CLIENT["🌐 Client-Side Container"]
+        direction TB
+        GTM["📦 GTM-XXXXXXX"]
+        
+        subgraph TAGS["🏷️ Tags"]
+            direction LR
+            GA4C["GA4 Config"]
+            GA4E["GA4 Events"]
+            META["Meta Pixel"]
+            GADS["Google Ads"]
+        end
+        
+        subgraph TRIGGERS["⚡ Triggers"]
+            direction LR
+            PV["Page View"]
+            CLICK["Clicks"]
+            FORM["Form Submit"]
+            CUSTOM["Custom Events"]
+        end
+        
+        subgraph VARS["📊 Variables"]
+            direction LR
+            DLV["DataLayer"]
+            URL["URL Params"]
+            1PC["1st Party Cookies"]
+            JS["Custom JS"]
+        end
+    end
+    
+    subgraph SERVER["☁️ Server-Side Container"]
+        direction TB
+        SGTM["Stape sGTM"]
+        
+        subgraph STAGS["Server Tags"]
+            SGA4["GA4 MP"]
+            SMETA["Meta CAPI"]
+            SGADS["Google Ads Conv"]
+        end
+    end
+    
+    GTM -->|"HTTP Request"| SGTM
+    
+    style CLIENT fill:#e8f0fe,stroke:#4285f4
+    style SERVER fill:#e6f4ea,stroke:#34a853

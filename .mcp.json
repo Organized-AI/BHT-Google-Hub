@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "mermaid-chart": {
+      "type": "url",
+      "url": "https://mcp.mermaidchart.com/mcp",
+      "name": "mermaid-chart"
+    },
+    "stape": {
+      "type": "url",
+      "url": "https://mcp.stape.ai/sse",
+      "name": "stape"
+    },
+    "gtm-stape": {
+      "type": "url",
+      "url": "https://gtm-mcp.stape.ai/sse",
+      "name": "gtm-stape"
+    }
+  }
+}

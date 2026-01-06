@@ -1,0 +1,24 @@
+%%{init: {'theme': 'base'}}%%
+flowchart TB
+    subgraph ISSUE["🔴 Issue Identified"]
+        PROBLEM["[ISSUE_DESCRIPTION]"]
+    end
+    
+    subgraph ROOT["🔍 Root Cause Analysis"]
+        CAUSE1["Possible Cause 1"]
+        CAUSE2["Possible Cause 2"]
+        CAUSE3["Possible Cause 3"]
+    end
+    
+    subgraph SOLUTION["✅ Recommended Fix"]
+        FIX["[SOLUTION_DESCRIPTION]"]
+        STEPS["Implementation Steps"]
+    end
+    
+    PROBLEM --> CAUSE1 & CAUSE2 & CAUSE3
+    CAUSE1 & CAUSE2 & CAUSE3 --> FIX
+    FIX --> STEPS
+    
+    style ISSUE fill:#fce8e6,stroke:#ea4335
+    style ROOT fill:#fef7e0,stroke:#fbbc04
+    style SOLUTION fill:#e6f4ea,stroke:#34a853
