@@ -300,3 +300,7 @@ The server uses standard JSON-RPC error codes with custom extensions:
 ## License
 
 MIT
+
+---
+
+Maintained by Jordaaan Hill ([LinkedIn](https://www.linkedin.com/in/jordaaanhill)).
